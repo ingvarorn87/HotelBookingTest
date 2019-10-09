@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using HotelBooking.Core;
 using HotelBooking.UnitTests.Fakes;
 using Xunit;
@@ -35,5 +36,21 @@ namespace HotelBooking.UnitTests
             Assert.NotEqual(-1, roomId);
         }
 
+        [Fact]
+        public void GetFullyOcupiedDates_SameDateTest()
+        {
+            DateTime date = DateTime.Today;
+            Assert.Throws<ArgumentException>(() => bookingManager.GetFullyOccupiedDates(date.AddDays(1), date));
+
+        }
+
+        [Fact]
+        public void GetFullyOccupiedDates_Valid_Test()
+        {
+            DateTime start = DateTime.Today;
+            DateTime end = start.AddDays(1);
+            var ret = bookingManager.GetFullyOccupiedDates(start, end);
+            Assert.IsType<List<DateTime>>(ret);
+        }
     }
 }
