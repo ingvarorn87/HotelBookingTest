@@ -108,23 +108,38 @@ namespace HotelBooking.UnitTests
         [Fact]
         public void CreateBookingTest()
         {
-            var booking = new Booking()
+            //create our fake bookings. both rooms are booked for the next 5 days
+            var bookings = new List<Booking>()
             {
-                CustomerId = 1,
-                Id = 1,
-                IsActive = true,
-                StartDate = DateTime.Today,
-                EndDate = DateTime.Today.AddDays(5),
-                RoomId = 1
+                new Booking()
+                {
+                    CustomerId = 1,
+                    Id = 1,
+                    IsActive = true,
+                    StartDate = DateTime.Today,
+                    EndDate = DateTime.Today.AddDays(5),
+                    RoomId = 1
+                },
+                new Booking()
+                {
+                    CustomerId = 1,
+                    Id = 2,
+                    IsActive = true,
+                    StartDate = DateTime.Today,
+                    EndDate = DateTime.Today.AddDays(5),
+                    RoomId = 2
+                }
             };
 
+            //creating mock repo
             Mock<IRepository<Booking>> mockRepo = new Mock<IRepository<Booking>>();
-            //mockRepo.Setup(x => x.Add(booking)).Verifiable();
-
+            //telling mock repo GetAll() to return our fake bookings when called
+            mockRepo.Setup(x => x.GetAll()).Returns(bookings);
+            //creating booking manager with using fake repo
             bookingManager = new BookingManager(mockRepo.Object,new FakeRoomRepository());
 
-
-            //fail in code: result should be false because room nr 1 is already booked in the fake booking we made.
+            //comment out second booking from fake bookings list for result below.
+            //failure in code: result should be false because room nr 1 is already booked in the fake booking we made.
             //but the code finds an available room (nr 2) and resets the roomnumber of the booking to 2 without us knowing it
             //var toAddBooking = new Booking()
             //{
@@ -136,18 +151,28 @@ namespace HotelBooking.UnitTests
             //var added = bookingManager.CreateBooking(toAddBooking);
             //Assert.False(added);
             //mockRepo.Verify();
-            
 
-            //this should be false because of the dates. it shouldn't be able to create a booking
+
+            //this should throw an argument exception because CreateBooking uses FindAvailableRooms which will cry when you fuck up the dates
+            //var toAddBooking = new Booking()
+            //{
+            //    StartDate = DateTime.Today.AddDays(2),
+            //    EndDate = DateTime.Today.AddDays(1),
+            //    RoomId = 1
+            //};
+
+            //Assert.Throws<ArgumentException>(() => bookingManager.CreateBooking(toAddBooking));
+            //mockRepo.Verify();
+
+            //uncomment second booking from fake bookings list for result below
+            //this should be false as there are no room available in setup scenario
             var toAddBooking = new Booking()
             {
-                StartDate = DateTime.Today.AddDays(2),
-                EndDate = DateTime.Today.AddDays(1),
+                StartDate = DateTime.Today.AddDays(1),
+                EndDate = DateTime.Today.AddDays(2),
                 RoomId = 1
             };
-
-            Assert.Throws<ArgumentException>(() => bookingManager.CreateBooking(toAddBooking));
-            mockRepo.Verify();
+            Assert.False(bookingManager.CreateBooking(toAddBooking));
         }
     }
 }
