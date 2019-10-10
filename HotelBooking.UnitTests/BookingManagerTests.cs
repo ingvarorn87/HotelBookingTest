@@ -150,7 +150,6 @@ namespace HotelBooking.UnitTests
 
             //var added = bookingManager.CreateBooking(toAddBooking);
             //Assert.False(added);
-            //mockRepo.Verify();
 
 
             //this should throw an argument exception because CreateBooking uses FindAvailableRooms which will cry when you fuck up the dates
@@ -162,7 +161,6 @@ namespace HotelBooking.UnitTests
             //};
 
             //Assert.Throws<ArgumentException>(() => bookingManager.CreateBooking(toAddBooking));
-            //mockRepo.Verify();
 
             //uncomment second booking from fake bookings list for result below
             //this should be false as there are no room available in setup scenario
