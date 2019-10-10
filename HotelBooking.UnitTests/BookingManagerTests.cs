@@ -152,7 +152,7 @@ namespace HotelBooking.UnitTests
             //Assert.False(added);
 
 
-            //this should throw an argument exception because CreateBooking uses FindAvailableRooms which will cry when you fuck up the dates
+            //this should throw an argument exception because CreateBooking uses FindAvailableRooms which will cry when you give invalid dates
             //var toAddBooking = new Booking()
             //{
             //    StartDate = DateTime.Today.AddDays(2),
