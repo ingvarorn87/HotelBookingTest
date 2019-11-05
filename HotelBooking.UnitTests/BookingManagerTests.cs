@@ -93,11 +93,11 @@ namespace HotelBooking.UnitTests
             //fail in code: findavailableroom won't search with today's date
             //because if (startDate <= DateTime.Today || startDate > endDate) <-- it should be < instead of <=
             //var availRoomId = bookingManager.FindAvailableRoom(DateTime.Today, DateTime.Today.AddDays(1));
-            //Assert.Equal(-1,availRoomId);
+            //Assert.Equal(10,availRoomId);
 
             //this should offer room 2 as it is booked 5 days away from now, and we're looking for 1 day away
-            var availRoomId = bookingManager.FindAvailableRoom(DateTime.Today.AddDays(1), DateTime.Today.AddDays(2));
-            Assert.InRange(availRoomId,1,2);
+            //var availRoomId = bookingManager.FindAvailableRoom(DateTime.Today.AddDays(1), DateTime.Today.AddDays(2));
+            //Assert.InRange(availRoomId,1,2);
 
             //this should throw an exception for startDate > endDate
             //Assert.Throws<ArgumentException>(() =>
@@ -138,32 +138,6 @@ namespace HotelBooking.UnitTests
             //creating booking manager with using fake repo
             bookingManager = new BookingManager(mockRepo.Object,new FakeRoomRepository());
 
-            //comment out second booking from fake bookings list for result below.
-            //failure in code: result should be false because room nr 1 is already booked in the fake booking we made.
-            //but the code finds an available room (nr 2) and resets the roomnumber of the booking to 2 without us knowing it
-            //var toAddBooking = new Booking()
-            //{
-            //    RoomId = 1,
-            //    StartDate = DateTime.Today.AddDays(1),
-            //    EndDate = DateTime.Today.AddDays(2)
-            //};
-
-            //var added = bookingManager.CreateBooking(toAddBooking);
-            //Assert.False(added);
-
-
-            //this should throw an argument exception because CreateBooking uses FindAvailableRooms which will cry when you give invalid dates
-            //var toAddBooking = new Booking()
-            //{
-            //    StartDate = DateTime.Today.AddDays(2),
-            //    EndDate = DateTime.Today.AddDays(1),
-            //    RoomId = 1
-            //};
-
-            //Assert.Throws<ArgumentException>(() => bookingManager.CreateBooking(toAddBooking));
-
-            //uncomment second booking from fake bookings list for result below
-            //this should be false as there are no room available in setup scenario
             var toAddBooking = new Booking()
             {
                 StartDate = DateTime.Today.AddDays(1),
