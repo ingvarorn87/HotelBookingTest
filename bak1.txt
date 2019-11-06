@@ -1,0 +1,69 @@
+Feature: Create booking
+	I want to book a room if there is any free room between the chosen dates.
+	Fully occpuied range is between 2019,12,9 and 2019,12,15
+
+	@SDonO
+	Scenario: Start date is in fully occupied range
+		Given I have entered <syear>,<smonth>,<sday> as start date
+		And I have entered <syear>,<smonth>,<eday> as end date
+		When I press book
+		Then the result should be false
+		
+		Examples: 
+		| syear | smonth | sday | eday |
+		| 2019  | 12     | 10   | 17   |
+
+	@SDinB_and_EDinO
+	Scenario: Start date is before fully occupied range, end date is in a fully occupied range
+		Given I have entered <syear>,<smonth>,<sday> as start date
+		And I have entered <syear>,<smonth>,<eday> as end date
+		When I press book
+		Then the result should be false
+
+		Examples: 
+		| syear | smonth | sday | eday |
+		| 2019  | 12     | 8   | 14   |
+
+	@SDinA_and_EDinA
+	Scenario: Start and end date is before the fully occupied range
+		Given I have entered <syear>,<smonth>,<sday> as start date
+		And I have entered <syear>,<smonth>,<eday> as end date
+		When I press book
+		Then The booking should be approved
+
+		Examples: 
+		| syear | smonth | sday | eday |
+		| 2019  | 12     | 1   | 8   |
+
+	@SDinA_and_EDinB
+	Scenario: Start Date is before the fully occupied range End date is after
+		Given I have entered <syear>,<smonth>,<sday> as start date
+		And I have entered <syear>,<smonth>,<eday> as end date
+		When I press book
+		Then The result should be false
+
+		Examples: 
+		| syear | smonth | sday | eday |
+		| 2019  | 12     | 7   | 16   |
+
+	@SDinB_and_EDinA
+	Scenario: Start date is before fully occupied range, end date is after fully occupied range
+		Given I have entered <syear>,<smonth>,<sday> as start date
+		And I have entered <syear>,<smonth>,<eday> as end date
+		When I press book
+		Then the result should be false
+
+		Examples: 
+		| syear | smonth | sday | eday |
+		| 2019  | 12     | 8   | 17   |
+
+	@SdinB_and_EDinB
+	Scenario: Start and end date is after the fully occupied range
+		Given I have entered <syear>,<smonth>,<sday> as start date
+		And I have entered <syear>,<smonth>,<eday> as end date
+		When I press book
+		Then The booking should be approved
+
+		Examples: 
+		| syear | smonth | sday | eday |
+		| 2019  | 12     | 16   | 22   |
